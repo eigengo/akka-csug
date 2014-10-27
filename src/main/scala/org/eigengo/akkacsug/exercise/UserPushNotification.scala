@@ -3,14 +3,18 @@ package org.eigengo.akkacsug.exercise
 import akka.actor.Actor
 import com.notnoop.apns.APNS
 
+import scala.io.Source
+
 object UserPushNotification {
   case class DefaultMessage(message: String)
 }
 
 class UserPushNotification extends Actor {
   import UserPushNotification._
-  private val certificatePath = System.getProperty("user.home") + "/.ios/lift-push-development.p12"
-  private val service = APNS.newService.withCert(certificatePath, "^Bantha P00d00$").withSandboxDestination.build
+  private val userHomeIos = System.getProperty("user.home") + "/.ios"
+  private val certificatePath = s"$userHomeIos/lift-push-development.p12"
+  private val certificatePassword = Source.fromFile(s"$userHomeIos/lift-push-development.pwd").mkString
+  private val service = APNS.newService.withCert(certificatePath, certificatePassword).withSandboxDestination.build
 
   override def receive: Receive = {
     case DefaultMessage(message) =>
