@@ -28,7 +28,7 @@ case object DynamicTimeWrappingModel extends ExerciseModel {
 }
 
 /**
- * Implementation left as an exercise
+ * This is the only implementation I can have a go at!
  */
 case object NaiveModel extends ExerciseModel {
   override def apply(data: AccelerometerData): ClassifiedExercise = ClassifiedExercise(1.0, Some("Goku is my spotter"))
