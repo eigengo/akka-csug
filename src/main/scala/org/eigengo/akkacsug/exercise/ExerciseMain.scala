@@ -5,6 +5,9 @@ import scodec.bits.BitVector
 
 import scala.io.StdIn
 
+/**
+ * CLI application for the exercise app
+ */
 object ExerciseMain extends App {
   import org.eigengo.akkacsug.exercise.UserExerciseProtocol._
   import akka.actor.ActorDSL._
@@ -14,6 +17,7 @@ object ExerciseMain extends App {
       case x => println(s">>> $x")
     }
   })
+  system.actorOf(Props[UserPushNotification], "push")
   val processor = system.actorOf(Props[UserExerciseProcessor])
   val view = system.actorOf(Props[UserExerciseView])
 
