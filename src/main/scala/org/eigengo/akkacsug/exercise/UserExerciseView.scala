@@ -3,8 +3,12 @@ package org.eigengo.akkacsug.exercise
 import akka.actor.Props
 import akka.persistence.{SnapshotOffer, PersistentView}
 
-class ExerciseView extends PersistentView {
-  import org.eigengo.akkacsug.exercise.ExerciseProtocol._
+/**
+ * View that handles processing the events, delegates to the classifiers,
+ * and provides the query functions.
+ */
+class UserExerciseView extends PersistentView {
+  import org.eigengo.akkacsug.exercise.UserExerciseProtocol._
 
   private var exercises: List[ClassifiedExercise] = Nil
 
@@ -12,19 +16,25 @@ class ExerciseView extends PersistentView {
   context.actorOf(Props(classOf[ExerciseClassifier], WaveletModel))
   context.actorOf(Props(classOf[ExerciseClassifier], DynamicTimeWrappingModel))
 
-  override def viewId: String = "exercise-view"
+  override def viewId: String = "user-exercise-view"
 
-  override def persistenceId: String = "exercise-persistence"
+  override def persistenceId: String = "user-exercise-persistence"
 
   override def receive: Receive = {
+    // Remember to handle snapshot offers when using ``saveSnapshot``
     case SnapshotOffer(metadata, offeredSnapshot) =>
       exercises = offeredSnapshot.asInstanceOf[List[ClassifiedExercise]]
+
+    // send the exercise to be classified to the children
     case e@ExerciseDataEvt(data) if isPersistent =>
       context.actorSelection("*") ! e
+
+    // classification received
     case e@ClassifiedExercise(confidence, exercise) =>
-      println("Got " + e)
       if (confidence > 0.0) exercises = e :: exercises
       saveSnapshot(exercises)
+
+    // query for exercises
     case GetExercises =>
       sender() ! exercises
   }

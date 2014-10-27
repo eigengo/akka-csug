@@ -6,7 +6,7 @@ import scodec.bits.BitVector
 import scala.io.StdIn
 
 object ExerciseMain extends App {
-  import org.eigengo.akkacsug.exercise.ExerciseProtocol._
+  import org.eigengo.akkacsug.exercise.UserExerciseProtocol._
   import akka.actor.ActorDSL._
   implicit val system = ActorSystem()
   implicit val _ = actor(new Act {
@@ -14,8 +14,8 @@ object ExerciseMain extends App {
       case x => println(s">>> $x")
     }
   })
-  val processor = system.actorOf(Props[ExerciseProcessor])
-  val view = system.actorOf(Props[ExerciseView])
+  val processor = system.actorOf(Props[UserExerciseProcessor])
+  val view = system.actorOf(Props[UserExerciseView])
 
   val is = getClass.getResourceAsStream("/training/chest1.dat")
   val bits = BitVector.fromInputStream(is)
