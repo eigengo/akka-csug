@@ -10,7 +10,7 @@ class AccelerometerImporter extends Actor {
 
   override def receive: Receive = {
     case bits: BitVector =>
-      val (bits2, ads) = parseAll(buffer ++ bits, Nil)
+      val (bits2, ads) = decodeAll(buffer ++ bits, Nil)
       buffer = bits2
       sender() ! ads
   }

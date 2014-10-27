@@ -26,7 +26,7 @@ class UserExerciseProcessor extends PersistentActor {
 
   override def receiveCommand: Receive = {
     case ExerciseDataCmd(bits) =>
-      val (bits2, data) = parseAll(buffer ++ bits, Nil)
+      val (bits2, data) = decodeAll(buffer ++ bits, Nil)
       if (validateData(data)) {
         persistAsync(ExerciseDataEvt(data)) { e =>
           buffer = bits2
