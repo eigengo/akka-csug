@@ -27,7 +27,7 @@ object AccelerometerData {
     val result = for {
       (body, (samplesPerSecond, count, _)) <- Codec.decode[CSU](bits)
       (rest, zyxs) <- Codec.decodeCollect[List, ZYX](packedAccelerometerData, Some(count))(body)
-      avs = zyxs.map { case (z, y, x) => AccelerometerValue(x, y, z)}
+      avs = zyxs.map { case (z, y, x) => AccelerometerValue(x, y, z) }
     } yield (rest, AccelerometerData(samplesPerSecond, avs))
 
     result.fold(_ => (bits, Nil), { case (bits2, ad) => (bits2, List(ad)) })
@@ -36,14 +36,14 @@ object AccelerometerData {
   @tailrec
   final def parseAll(bits: BitVector, ads: List[AccelerometerData]): (BitVector, List[AccelerometerData]) = {
     parse(bits) match {
-      // parsed all we could, nothing remains
+      // Parsed all we could, nothing remains
       case (BitVector.empty, ads2) => (BitVector.empty, ads ++ ads2)
-      // parsed all we could
+      // Parsed all we could, but exactly `bits` remain => we did not get any further.
+      // Repeated recursion will not solve anything.
       case (`bits`, ads2) => (bits, ads ++ ads2)
-      // still something left to parse
+      // Still something left to parse
       case (neb, ads2) => parseAll(neb, ads ++ ads2)
     }
   }
 
 }
-
