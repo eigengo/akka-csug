@@ -16,9 +16,9 @@ class UserExerciseView extends PersistentView {
   context.actorOf(Props(classOf[ExerciseClassifier], WaveletModel))
   context.actorOf(Props(classOf[ExerciseClassifier], DynamicTimeWrappingModel))
 
-  override def viewId: String = "user-exercise-view"
+  override val viewId: String = "user-exercise-view"
 
-  override def persistenceId: String = "user-exercise-persistence"
+  override val persistenceId: String = "user-exercise-persistence"
 
   override def receive: Receive = {
     // Remember to handle snapshot offers when using ``saveSnapshot``

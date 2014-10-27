@@ -20,9 +20,9 @@ class UserExerciseProcessor extends PersistentActor {
     case h :: t => data.forall(_.samplingRate == h.samplingRate)
   }
 
-  override def persistenceId: String = "user-exercise-persistence"
+  override val persistenceId: String = "user-exercise-persistence"
 
-  override def receiveRecover: Receive = Actor.emptyBehavior
+  override val receiveRecover: Receive = Actor.emptyBehavior
 
   override def receiveCommand: Receive = {
     case ExerciseDataCmd(bits) =>
