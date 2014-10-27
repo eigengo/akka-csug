@@ -34,7 +34,7 @@ class UserExerciseView extends PersistentView {
     case e@ClassifiedExercise(confidence, exercise) =>
       if (confidence > 0.0) exercises = e :: exercises
       saveSnapshot(exercises)
-      exercise.foreach(e => context.actorSelection("/user/push") ! DefaultMessage(e))
+      exercise.foreach(e => context.actorSelection("/user/push") ! DefaultMessage(e, Some(1), Some("default")))
 
     // query for exercises
     case GetExercises =>

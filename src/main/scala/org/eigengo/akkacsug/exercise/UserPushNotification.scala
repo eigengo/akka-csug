@@ -5,10 +5,23 @@ import com.notnoop.apns.APNS
 
 import scala.io.Source
 
+/**
+ * UserPushNotification protocol
+ */
 object UserPushNotification {
-  case class DefaultMessage(message: String)
+
+  /**
+   * Sends default message to the client
+   * @param message the message
+   * @param badge the badge
+   * @param sound the sound
+   */
+  case class DefaultMessage(message: String, badge: Option[Int], sound: Option[String])
 }
 
+/**
+ * Pushes the notifications to the given user
+ */
 class UserPushNotification extends Actor {
   import UserPushNotification._
   private val userHomeIos = System.getProperty("user.home") + "/.ios"
@@ -17,10 +30,12 @@ class UserPushNotification extends Actor {
   private val service = APNS.newService.withCert(certificatePath, certificatePassword).withSandboxDestination.build
 
   override def receive: Receive = {
-    case DefaultMessage(message) =>
+    case DefaultMessage(message, badge, sound) =>
       // lookup user device Id
       val deviceToken = "131af4f2 64f2c000 b5814833 90d01b87 f5cbd074 48bea21b 9b517640 97a5c74c"
-      val payload = APNS.newPayload.alertBody(message).badge(1).sound("default").build
-      service.push(deviceToken, payload)
+      val payloadBuilder = APNS.newPayload.alertBody(message)
+      badge.foreach(payloadBuilder.badge)
+      sound.foreach(payloadBuilder.sound)
+      service.push(deviceToken, payloadBuilder.build())
   }
 }
