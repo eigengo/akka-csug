@@ -1,32 +1,14 @@
 package org.eigengo.akkacsug
 
-import akka.actor.Actor
 import scodec.Codec
 import scodec.bits.BitVector
 
 import scala.annotation.tailrec
 
-object AccelerometerImporter {
+case class AccelerometerData(samplingRate: Int, values: List[AccelerometerValue])
+case class AccelerometerValue(x: Int, y: Int, z: Int)
 
-  case class AccelerometerData(samplingRate: Int, values: List[AccelerometerValue])
-  case class AccelerometerValue(x: Int, y: Int, z: Int)
-
-}
-
-class AccelerometerImporter extends Actor with AccelerometerImporterBase {
-  var buffer: BitVector = BitVector.empty
-
-  override def receive: Receive = {
-    case bits: BitVector =>
-      val (bits2, ads) = parseAll(buffer ++ bits, Nil)
-      buffer = bits2
-      sender() ! ads
-  }
-
-}
-
-trait AccelerometerImporterBase {
-  import org.eigengo.akkacsug.AccelerometerImporter._
+object AccelerometerData {
   import scodec.codecs._
 
   private type ZYX = (Int, Int, Int)
@@ -64,3 +46,4 @@ trait AccelerometerImporterBase {
   }
 
 }
+

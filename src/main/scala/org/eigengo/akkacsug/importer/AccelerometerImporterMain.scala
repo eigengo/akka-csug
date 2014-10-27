@@ -1,20 +1,19 @@
-package org.eigengo.akkacsug
+package org.eigengo.akkacsug.importer
 
 import akka.actor.{ActorSystem, Props}
 import akka.util.Timeout
+import org.eigengo.akkacsug.AccelerometerData
 import scodec.bits.BitVector
 
 import scala.io.StdIn
 
 object AccelerometerImporterMain extends App {
   import akka.pattern.ask
-  import org.eigengo.akkacsug.AccelerometerImporter._
-
-import scala.concurrent.duration._
+  import scala.concurrent.duration._
 
   implicit val timeout = Timeout(5.seconds)
   implicit val system = ActorSystem()
-  import org.eigengo.akkacsug.AccelerometerImporterMain.system.dispatcher
+  import system.dispatcher
   val importer = system.actorOf(Props[AccelerometerImporter])
 
   val is = getClass.getResourceAsStream("/training/chest1.dat")

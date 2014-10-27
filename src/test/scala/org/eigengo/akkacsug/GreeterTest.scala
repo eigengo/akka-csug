@@ -2,6 +2,7 @@ package org.eigengo.akkacsug
 
 import akka.actor.ActorSystem
 import akka.testkit.{ImplicitSender, TestActorRef, TestKitBase}
+import org.eigengo.akkacsug.hello.Greeter
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
