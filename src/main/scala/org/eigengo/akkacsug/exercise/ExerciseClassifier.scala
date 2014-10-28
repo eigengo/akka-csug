@@ -39,8 +39,7 @@ case object NaiveModel extends ExerciseModel {
  * @param model the model
  */
 class ExerciseClassifier(model: ExerciseModel) extends Actor {
-
-  import org.eigengo.akkacsug.exercise.UserExerciseProtocol._
+  import UserExerciseProtocol._
 
   override def receive: Receive = {
     case ExerciseDataEvt(data) if data.nonEmpty =>

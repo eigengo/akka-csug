@@ -10,10 +10,10 @@ import scodec.bits.BitVector
  * appropriate events.
  */
 class UserExerciseProcessor extends PersistentActor {
-  private var buffer: BitVector = BitVector.empty
-
   import AccelerometerData._
   import UserExerciseProtocol._
+
+  private var buffer: BitVector = BitVector.empty
 
   private def validateData(data: List[AccelerometerData]): Boolean = data match {
     case Nil => true

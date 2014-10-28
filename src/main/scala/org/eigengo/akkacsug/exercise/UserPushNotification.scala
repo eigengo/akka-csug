@@ -24,6 +24,7 @@ object UserPushNotification {
  */
 class UserPushNotification extends Actor {
   import UserPushNotification._
+
   private val userHomeIos = System.getProperty("user.home") + "/.ios"
   private val certificatePath = s"$userHomeIos/lift-push-development.p12"
   private val certificatePassword = Source.fromFile(s"$userHomeIos/lift-push-development.pwd").mkString
