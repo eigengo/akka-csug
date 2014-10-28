@@ -9,7 +9,8 @@ import scala.io.StdIn
  * CLI application for the exercise app
  */
 object ExerciseMain extends App {
-  import org.eigengo.akkacsug.exercise.UserExerciseProtocol._
+  import UserExerciseProtocol._
+  import actors._
   import akka.actor.ActorDSL._
   implicit val system = ActorSystem()
   implicit val _ = actor(new Act {
@@ -17,7 +18,7 @@ object ExerciseMain extends App {
       case x => println(s">>> $x")
     }
   })
-  system.actorOf(Props[UserPushNotification], "push")
+  system.actorOf(Props[UserPushNotification], pushNotification.name)
   val processor = system.actorOf(Props[UserExerciseProcessor])
   val view = system.actorOf(Props[UserExerciseView])
 

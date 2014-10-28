@@ -8,8 +8,9 @@ import akka.persistence.{PersistentView, SnapshotOffer}
  * and provides the query functions.
  */
 class UserExerciseView extends PersistentView {
-  import org.eigengo.akkacsug.exercise.UserExerciseProtocol._
-  import org.eigengo.akkacsug.exercise.UserPushNotification._
+  import UserExerciseProtocol._
+  import UserPushNotification._
+  import actors._
 
   private var exercises: List[ClassifiedExercise] = Nil
 
@@ -34,7 +35,8 @@ class UserExerciseView extends PersistentView {
     case e@ClassifiedExercise(confidence, exercise) =>
       if (confidence > 0.0) exercises = e :: exercises
       saveSnapshot(exercises)
-      exercise.foreach(e => context.actorSelection("/user/push") ! DefaultMessage(e, Some(1), Some("default")))
+      // notice the lookup rather than injection of the /user/push actor
+      exercise.foreach(e => pushNotification.apply ! DefaultMessage(e, Some(1), Some("default")))
 
     // query for exercises
     case GetExercises =>

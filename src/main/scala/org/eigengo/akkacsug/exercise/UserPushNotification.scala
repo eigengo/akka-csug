@@ -32,7 +32,8 @@ class UserPushNotification extends Actor {
   override def receive: Receive = {
     case DefaultMessage(message, badge, sound) =>
       // lookup user device Id
-      val deviceToken = "131af4f2 64f2c000 b5814833 90d01b87 f5cbd074 48bea21b 9b517640 97a5c74c"
+      // "131af4f2 64f2c000 b5814833 90d01b87 f5cbd074 48bea21b 9b517640 97a5c74c"
+      val deviceToken = "5ab84805 f8d0cc63 0a8990a8 4d480841 c3684003 6c122c8e 52a8dcfd 68a6f6f8"
       val payloadBuilder = APNS.newPayload.alertBody(message)
       badge.foreach(payloadBuilder.badge)
       sound.foreach(payloadBuilder.sound)
