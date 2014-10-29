@@ -8,10 +8,9 @@ object Greeter {
 
 }
 
-class Greeter extends Actor {
-  import org.eigengo.akkacsug.hello.Greeter._
+class Greeter {
 
-  def receive: Receive = {
-    case Greet(p, g) => sender() ! s"$g $p"
-  }
+  // define this to be an actor, and handle the message from
+  // the Greeter companion
+
 }

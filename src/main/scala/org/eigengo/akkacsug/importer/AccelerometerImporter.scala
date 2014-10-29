@@ -4,15 +4,18 @@ import akka.actor.Actor
 import org.eigengo.akkacsug.AccelerometerData
 import scodec.bits.BitVector
 
+/**
+ * Collects the received ``BitVector``s, and replies when ``List[AccelerometerData]`` once
+ * it has sufficient bits to decode.
+ *
+ * If the received bits are not yet sufficient, it buffers the bits
+ */
 class AccelerometerImporter extends Actor {
   var buffer: BitVector = BitVector.empty
-  import AccelerometerData._
 
+  // append the bits, decode, update state, and reply with the decoded List[AccelerometerData]
   override def receive: Receive = {
-    case bits: BitVector =>
-      val (bits2, ads) = decodeAll(buffer ++ bits, Nil)
-      buffer = bits2
-      sender() ! ads
+    ???
   }
 
 }

@@ -11,17 +11,15 @@ object AccelerometerImporterMain extends App {
   import akka.pattern.ask
   import scala.concurrent.duration._
 
-  implicit val timeout = Timeout(5.seconds)
-  implicit val system = ActorSystem()
-  import system.dispatcher
-  val importer = system.actorOf(Props[AccelerometerImporter])
+  // construct the ActorSystem
+  // construct the AccelerometerImporter
 
-  val is = getClass.getResourceAsStream("/training/chest1.dat")
-  val bits = BitVector.fromInputStream(is)
-  (importer ? bits).mapTo[List[AccelerometerData]].onSuccess {
-    case ads => ads.foreach(avs => avs.values.foreach(av => println(s"${av.x},${av.y},${av.z}")))
-  }
+  // load the classpath resource ``/training/*.dat``
+  // turn it into BitVector (use the companion object functions)
 
-  StdIn.readLine()
-  system.shutdown()
+  // import akka.pattern.ask
+  // ask the importer for the result of sending it the bits
+
+  // print the received values as CSV data on the console
+  // optional: use R to plot the time series data
 }
