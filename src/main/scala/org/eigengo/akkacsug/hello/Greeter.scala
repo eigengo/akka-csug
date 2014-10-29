@@ -1,6 +1,7 @@
 package org.eigengo.akkacsug.hello
 
 import akka.actor.Actor
+import akka.actor.Actor.Receive
 
 object Greeter {
 
@@ -8,9 +9,8 @@ object Greeter {
 
 }
 
-class Greeter {
+class Greeter extends Actor {
 
-  // define this to be an actor, and handle the message from
-  // the Greeter companion
-
+  // handle the message from the Greeter companion
+  override def receive: Receive = ???
 }

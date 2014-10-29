@@ -44,9 +44,11 @@ import scodec.bits.BitVector
  * {{{
  * gfs_header::type               = 0xfefc -> fcfe
  * gfs_header::count              = 0x0003 -> 0300
- * gfs_header::samples_per_second = 0x64 -> 0x64
+ * gfs_header::samples_per_second = 0x64   -> 0x64
  *
- * gfs_packed_accel_data::x       =  376
+ * gfs_packed_accel_data::x       =  0 0001 0111 1000 -> 376
+ * gfs_packed_accel_data::y       =  0 0010 0101 0000 -> 592
+ * gfs_packed_accel_data::z       =  1 1100 1111 0000 -> -784
  * }}}
  */
 class AccelerometerDataTest extends FlatSpec with Matchers {
