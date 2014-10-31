@@ -14,7 +14,7 @@ object actors {
     /** The actor name */
     val name = "push-notification"
     /** The lookup function */
-    def apply(implicit arf: ActorRefFactory): ActorSelection = arf.actorSelection(s"/user/$name")
+    def lookup(implicit arf: ActorRefFactory): ActorSelection = arf.actorSelection(s"/user/$name")
   }
 
 }

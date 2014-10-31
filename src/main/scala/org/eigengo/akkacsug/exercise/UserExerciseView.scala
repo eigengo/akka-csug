@@ -36,7 +36,7 @@ class UserExerciseView extends PersistentView {
       if (confidence > 0.0) exercises = e :: exercises
       saveSnapshot(exercises)
       // notice the lookup rather than injection of the /user/push actor
-      exercise.foreach(e => pushNotification.apply ! DefaultMessage(e, Some(1), Some("default")))
+      exercise.foreach(e => pushNotification.lookup ! DefaultMessage(e, Some(1), Some("default")))
 
     // query for exercises
     case GetExercises =>
