@@ -1,6 +1,5 @@
 package org.eigengo.akkacsug.exercise
 
-import akka.actor.Actor.Receive
 import akka.actor.Props
 import akka.persistence.{PersistentView, SnapshotOffer}
 
@@ -13,9 +12,34 @@ class UserExerciseView extends PersistentView {
   import UserPushNotification._
   import actors._
 
-  override def viewId: String = ???
+  private var exercises: List[ClassifiedExercise] = Nil
 
-  override def persistenceId: String = ???
+  context.actorOf(Props(classOf[ExerciseClassifier], NaiveModel))
+  context.actorOf(Props(classOf[ExerciseClassifier], WaveletModel))
+  context.actorOf(Props(classOf[ExerciseClassifier], DynamicTimeWrappingModel))
 
-  override def receive: Receive = ???
+  override val viewId: String = "user-exercise-view"
+
+  override val persistenceId: String = "user-exercise-persistence"
+
+  override def receive: Receive = {
+    // Remember to handle snapshot offers when using ``saveSnapshot``
+    case SnapshotOffer(metadata, offeredSnapshot: List[ClassifiedExercise @unchecked]) =>
+      exercises = offeredSnapshot
+
+    // send the exercise to be classified to the children
+    case e@ExerciseDataEvt(data) if isPersistent =>
+      context.actorSelection("*") ! e
+
+    // classification received
+    case e@ClassifiedExercise(confidence, exercise) =>
+      if (confidence > 0.0) exercises = e :: exercises
+      saveSnapshot(exercises)
+      // notice the lookup rather than injection of the /user/push actor
+      exercise.foreach(e => pushNotification.apply ! DefaultMessage(e, Some(1), Some("default")))
+
+    // query for exercises
+    case GetExercises =>
+      sender() ! exercises
+  }
 }

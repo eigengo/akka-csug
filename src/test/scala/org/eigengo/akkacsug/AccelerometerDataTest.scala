@@ -28,7 +28,8 @@ import scodec.bits.BitVector
  * };
  * }}}
  *
- * An example of the data is
+ * The data arrives in big endian encoded-stream, but with reverse byte order in the
+ * "packets". And thus,
  *
  * {{{
  * fcfe 0300 64 -> count = 3, samplesPerSecond = 100 (Hz)
@@ -37,18 +38,6 @@ import scodec.bits.BitVector
  * 7801 4ac0 73 -> x = 376, y = 592, z = -784
  * fcfe 0100 64 -> count = 1, samplesPerSecond = 100 (Hz)
  * 7801 4ac0 73 -> x =  376, y = 592, z = -784
- * }}}
- *
- * And thus,
- *
- * {{{
- * gfs_header::type               = 0xfefc -> fcfe
- * gfs_header::count              = 0x0003 -> 0300
- * gfs_header::samples_per_second = 0x64   -> 0x64
- *
- * gfs_packed_accel_data::x       =  0 0001 0111 1000 -> 376
- * gfs_packed_accel_data::y       =  0 0010 0101 0000 -> 592
- * gfs_packed_accel_data::z       =  1 1100 1111 0000 -> -784
  * }}}
  */
 class AccelerometerDataTest extends FlatSpec with Matchers {
